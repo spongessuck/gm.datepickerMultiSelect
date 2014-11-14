@@ -15,15 +15,14 @@ The property 'selectedDates' on the controller (or its scope) then acts as a mod
 
 Tested in AngularJS 1.2.25 and 1.3.1, and UI Bootstrap 0.11.x.
 
-The property 'selectDates' on the controller (or its scope) then acts as a model for any dates selected in the Datepicker.
-
 NOTE: Selected dates are stored as an array of time values, not date objects.
 
 Also supports toggling.
-
-TODO: Update view when month changes.
 
 <a href='http://plnkr.co/edit/X7josME8hpIgJDt3IibG?p=preview' target='_blank'>DEMO</a>
 
 ![Alt text](screenshot.png "Screenshot")
 
+####TODO:
+
+Update view when month changes.
