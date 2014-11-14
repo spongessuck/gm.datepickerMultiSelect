@@ -53,8 +53,6 @@ angular.module('gm.datepickerMultiSelect', ['ui.bootstrap'])
     link: function(scope, elem, attrs, ctrls) {
 			var selectedDates = scope.$eval(attrs.multiSelect);
       
-      elem.isolateScope().selectedDates = selectedDates;
-      
       scope.$watchCollection(attrs.multiSelect, function(newVal) {
         scope.$broadcast('selection', selectedDates);
       });
