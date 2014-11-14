@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:ng="http://angularjs.org" id="ng-app" ng-app="app">
+<head>
+	<meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+	<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="description" content="gm.datepickerMultiSelect Example">
+    <meta name="author" content="Gregory McGee">
+<!--	<base href="/ProfessionalFormation.org/"></base>
+	<link rel="icon" href="">-->
+	
+	<title>gm.datepickerMultiSelect Example</title>
+    
+<!-- Required libs -->
+	
+	<script src="//ajax.googleapis.com/ajax/libs/angularjs/1.2.25/angular.min.js"></script>
+	<script src="//cdnjs.cloudflare.com/ajax/libs/angular-ui-bootstrap/0.11.2/ui-bootstrap-tpls.min.js"></script>
+	
+<!-- Polyfills -->
+	
+	<script src="//getbootstrap.com/assets/js/ie10-viewport-bug-workaround.js"></script>
+	
+	<!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+      <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+      <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+    <![endif]-->
+
+<!-- Bootstrap -->
+	
+	<!-- Latest compiled and minified CSS -->
+	<link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css" />
+	
+<!-- App files -->
+	<script src="modules/gm.datepickerMultiSelect.js"></script>
+	<script src="modules/app.js"></script>
+  <style>
+    body { padding:10px; }
+    td { vertical-align: top }
+  </style>
+</head>
+
+<body ng-controller='AppCtrl as app'>
+  <table>
+    <tr>
+      <td>
+        <datepicker ng-model='app.activeDate' multi-select='app.selectedDates'></datepicker>
+      </td>
+      <td style='width:50px'>
+      </td>
+      <td>
+        <div>Selected Dates:</div>
+        <div class='well well-sm'>
+          <div ng-repeat='d in app.selectedDates'>
+          {{d | date : 'fullDate'}}
+            <button class='btn btn-xs btn-warning' style='margin:5px' ng-click='app.removeFromSelected(d)'>Remove</button>
+          </div>
+        </div>
+      </td>
+    </tr>
+  </table>
+</body>
+</html>

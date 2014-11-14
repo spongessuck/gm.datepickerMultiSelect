@@ -5,14 +5,18 @@ gm.datepickerMultiSelect is an AngularJS module to extend UI Bootstrap's Datepic
 
 Simply include the module:
 
-  angular.module('myApp', ['ui.bootstrap', 'gm.datepickerMultiSelect']);
+    angular.module('myApp', ['ui.bootstrap', 'gm.datepickerMultiSelect']);
 
 And use thusly:
 
-  <datepicker ng-model='activeDate' multi-select='selectedDates'><datepicker>
+    <datepicker ng-model='activeDate' multi-select='selectedDates'><datepicker>
   
 The property 'selectDates' on the controller (or its scope) then acts as a model for any dates selected in the Datepicker.
 
+NOTE: Selected dates are stored as an array of time values, not date objects.
+
 Also supports toggling.
+
+<a href='default.html'>DEMO</a>
 
 ![Alt text](screenshot.png "Screenshot")
