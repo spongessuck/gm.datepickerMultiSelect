@@ -19,8 +19,9 @@ NOTE: Selected dates are stored as an array of time values, not date objects.
 
 Also supports toggling.
 
-<a href='http://plnkr.co/edit/X7josME8hpIgJDt3IibG?p=preview' target='_blank'>DEMO</a>
+<a href='http://plnkr.co/edit/X7josME8hpIgJDt3IibG?p=preview' target='_blank'>View demo on Plunker</a>
 
+Screenshot:
 ![Alt text](screenshot.png "Screenshot")
 
 ####TODO:
