@@ -11,7 +11,7 @@ And use thusly:
 
     <datepicker ng-model='activeDate' multi-select='selectedDates'><datepicker>
   
-The property 'selectDates' on the controller (or its scope) then acts as a model for any dates selected in the Datepicker.
+The property 'selectedDates' on the controller (or its scope) then acts as a model for any dates selected in the Datepicker.
 
 Tested with AngularJS 1.2.25 and 1.3.1, and UI Bootstrap 0.11.x.
 
