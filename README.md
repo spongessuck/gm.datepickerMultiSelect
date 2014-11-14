@@ -23,7 +23,7 @@ Also supports toggling.
 
 TODO: Update view when month changes.
 
-<a href='http://plnkr.co/edit/X7josME8hpIgJDt3IibG?p=preview'>DEMO</a>
+<a href='http://plnkr.co/edit/X7josME8hpIgJDt3IibG?p=preview' target='_blank'>DEMO</a>
 
 ![Alt text](screenshot.png "Screenshot")
 
