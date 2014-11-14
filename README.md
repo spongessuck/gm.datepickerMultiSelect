@@ -17,6 +17,6 @@ NOTE: Selected dates are stored as an array of time values, not date objects.
 
 Also supports toggling.
 
-<a href='default.html'>DEMO</a>
+<a href='http://plnkr.co/edit/X7josME8hpIgJDt3IibG?p=preview'>DEMO</a>
 
 ![Alt text](screenshot.png "Screenshot")
