@@ -34,13 +34,21 @@ angular.module('gm.datepickerMultiSelect', ['ui.bootstrap'])
 			return function(scope, element, attrs, ctrl) {
 				link.apply(this, arguments);
         
-				scope.$on('selection', function(event, selectedDates) {
-					angular.forEach(scope.rows, function(row) {
+        var selectedDates = [];
+        
+        /* Called when multiSelect model is updated */
+				scope.$on('update', function(event, newDates) {
+          selectedDates = newDates;
+        });
+        
+        /* Fires when date is selected or when month is changed */
+        scope.$parent.$watch('activeDateId', function() {
+          angular.forEach(scope.rows, function(row) {
             angular.forEach(row, function(day) {
-              day.selected =  selectedDates.indexOf(day.date.setHours(0, 0, 0, 0)) > -1
+              day.selected = selectedDates.indexOf(day.date.setHours(0, 0, 0, 0)) > -1
             });
           });
-				});
+        });
 			}
 		}
 		
@@ -54,20 +62,19 @@ angular.module('gm.datepickerMultiSelect', ['ui.bootstrap'])
 			var selectedDates = scope.$eval(attrs.multiSelect);
       
       scope.$watchCollection(attrs.multiSelect, function(newVal) {
-        scope.$broadcast('selection', selectedDates);
+        scope.$broadcast('update', selectedDates);
       });
 
 			scope.$watch(attrs.ngModel, function(newVal) {
 				if(!newVal) return;
         
 				var dateVal = newVal.getTime();
-        
+
 				if(selectedDates.indexOf(dateVal) < 0) {
 					selectedDates.push(dateVal);
 				} else {
           selectedDates.splice(selectedDates.indexOf(dateVal), 1);
         }
-        selectedDates.sort();
 			});
 		}
 	}
