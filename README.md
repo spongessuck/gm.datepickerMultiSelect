@@ -19,11 +19,7 @@ NOTE: Selected dates are stored as an array of time values, not date objects.
 
 Also supports toggling.
 
-<a href='http://plnkr.co/edit/X7josME8hpIgJDt3IibG?p=preview' target='_blank'>View demo on Plunker</a>
+<a href='http://plnkr.co/edit/vIUqTy9Q2CerkHKEaOGT?p=preview' target='_blank'>View demo on Plunker</a>
 
 Screenshot:
 ![Alt text](screenshot.png "Screenshot")
-
-####Issues:
-
-View doesn't update when month changes- selected dates appear again when the active date changes.
