@@ -43,6 +43,9 @@ angular.module('gm.datepickerMultiSelect', ['ui.bootstrap'])
 					update();
 				});
 				
+				/* Get dates pushed into multiSelect array before Datepicker is ready */
+				scope.$emit('requestSelectedDates');
+				
 				/**
 				 * Fires when date is selected or when month is changed.
 				 * Fires after multiSelect model updates, so check to
@@ -73,6 +76,11 @@ angular.module('gm.datepickerMultiSelect', ['ui.bootstrap'])
 		require: ['datepicker', 'ngModel'],
 		link: function(scope, elem, attrs, ctrls) {
 			var selectedDates = scope.$eval(attrs.multiSelect);
+			
+			/* Called when directive is compiled */
+			scope.$on('requestSelectedDates', function() {
+				scope.$broadcast('update', selectedDates);
+			});
 			
 			scope.$watchCollection(attrs.multiSelect, function(newVal) {
 				scope.$broadcast('update', selectedDates);
