@@ -26,26 +26,30 @@ angular.module('gm.datepickerMultiSelect', ['ui.bootstrap'])
 .config(function($provide) {
 	$provide.decorator('daypickerDirective', function($delegate) {
 		var directive = $delegate[0];
-		
+
 		/* Override compile */
 		var link = directive.link;
 
 		directive.compile = function() {
 			return function(scope, element, attrs, ctrl) {
 				link.apply(this, arguments);
-				
+
 				var selectedDates = [];
 				var alreadyUpdated;
-				
+
 				/* Called when multiSelect model is updated */
 				scope.$on('update', function(event, newDates) {
 					selectedDates = newDates;
 					update();
+
+					// Need to set the flag to false to show dynamic selected
+					// dates that aren't on the actual month.
+					alreadyUpdated = false;
 				});
-				
+
 				/* Get dates pushed into multiSelect array before Datepicker is ready */
 				scope.$emit('requestSelectedDates');
-				
+
 				/**
 				 * Fires when date is selected or when month is changed.
 				 * Fires after multiSelect model updates, so check to
@@ -56,7 +60,7 @@ angular.module('gm.datepickerMultiSelect', ['ui.bootstrap'])
 						update();
 					alreadyUpdated = false;
 				});
-				
+
 				function update() {
 					angular.forEach(scope.rows, function(row) {
 						angular.forEach(row, function(day) {
@@ -67,7 +71,7 @@ angular.module('gm.datepickerMultiSelect', ['ui.bootstrap'])
 				}
 			}
 		}
-		
+
 		return $delegate;
 	});
 })
@@ -75,20 +79,24 @@ angular.module('gm.datepickerMultiSelect', ['ui.bootstrap'])
 	return {
 		require: ['datepicker', 'ngModel'],
 		link: function(scope, elem, attrs, ctrls) {
-			var selectedDates = scope.$eval(attrs.multiSelect);
-			
+			var selectedDates = scope.$eval(attrs.multiSelect) ?
+								scope.$eval(attrs.multiSelect) :
+								[];
+
 			/* Called when directive is compiled */
 			scope.$on('requestSelectedDates', function() {
 				scope.$broadcast('update', selectedDates);
 			});
-			
+
 			scope.$watchCollection(attrs.multiSelect, function(newVal) {
+				// Updating selectedDates when loading dynamically.
+				selectedDates = newVal ? newVal : selectedDates;
 				scope.$broadcast('update', selectedDates);
 			});
 
 			scope.$watch(attrs.ngModel, function(newVal, oldVal) {
 				if(!newVal) return;
-				
+
 				var dateVal = newVal.getTime();
 
 				if(selectedDates.indexOf(dateVal) < 0) {
