@@ -83,7 +83,7 @@ angular.module('gm.datepickerMultiSelect', ['ui.bootstrap'])
 			});
 			
 			scope.$watchCollection(attrs.multiSelect, function(newVal) {
-				selectedDates = newVal;
+				selectedDates = newVal || [];
 				scope.$broadcast('update', selectedDates);
 			});
 
