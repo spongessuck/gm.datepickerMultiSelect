@@ -75,7 +75,7 @@ angular.module('gm.datepickerMultiSelect', ['ui.bootstrap'])
 	return {
 		require: ['datepicker', 'ngModel'],
 		link: function(scope, elem, attrs, ctrls) {
-			var selectedDates = scope.$eval(attrs.multiSelect);
+			var selectedDates;
 			
 			/* Called when directive is compiled */
 			scope.$on('requestSelectedDates', function() {
@@ -83,6 +83,7 @@ angular.module('gm.datepickerMultiSelect', ['ui.bootstrap'])
 			});
 			
 			scope.$watchCollection(attrs.multiSelect, function(newVal) {
+				selectedDates = newVal || [];
 				scope.$broadcast('update', selectedDates);
 			});
 
