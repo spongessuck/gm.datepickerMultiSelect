@@ -35,7 +35,6 @@ angular.module('gm.datepickerMultiSelect', ['ui.bootstrap'])
 				link.apply(this, arguments);
 				
 				var selectedDates = [];
-				var alreadyUpdated;
 				
 				/* Called when multiSelect model is updated */
 				scope.$on('update', function(event, newDates) {
@@ -46,16 +45,10 @@ angular.module('gm.datepickerMultiSelect', ['ui.bootstrap'])
 				/* Get dates pushed into multiSelect array before Datepicker is ready */
 				scope.$emit('requestSelectedDates');
 				
-				/**
-				 * Fires when date is selected or when month is changed.
-				 * Fires after multiSelect model updates, so check to
-				 * see if update was already called this cycle.
-				 **/
-				scope.$parent.$watch(function () { return ctrl.activeDate.valueOf(); }, function() {
-					if(!alreadyUpdated)
-						update();
-					alreadyUpdated = false;
-				});
+				/* Fires when date is selected or when month is changed. */
+				scope.$watch(function () {
+				  return ctrl.activeDate.getTime();
+				}, update);
 				
 				function update() {
 					angular.forEach(scope.rows, function(row) {
@@ -63,7 +56,6 @@ angular.module('gm.datepickerMultiSelect', ['ui.bootstrap'])
 							day.selected = selectedDates.indexOf(day.date.setHours(0, 0, 0, 0)) > -1
 						});
 					});
-					alreadyUpdated = true;
 				}
 			}
 		}
