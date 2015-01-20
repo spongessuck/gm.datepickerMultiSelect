@@ -47,7 +47,7 @@ angular.module('gm.datepickerMultiSelect', ['ui.bootstrap'])
 				
 				/* Fires when date is selected or when month is changed. */
 				scope.$watch(function () {
-				  return ctrl.activeDate.getTime();
+					return ctrl.activeDate.getTime();
 				}, update);
 				
 				function update() {
