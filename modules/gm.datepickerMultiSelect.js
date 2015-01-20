@@ -51,7 +51,7 @@ angular.module('gm.datepickerMultiSelect', ['ui.bootstrap'])
 				 * Fires after multiSelect model updates, so check to
 				 * see if update was already called this cycle.
 				 **/
-				scope.$parent.$watch('activeDateId', function() {
+				scope.$parent.$watch(function () { return ctrl.activeDate.valueOf(); }, function() {
 					if(!alreadyUpdated)
 						update();
 					alreadyUpdated = false;
