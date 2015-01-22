@@ -23,8 +23,8 @@ SOFTWARE.
 */
 
 angular.module('gm.datepickerMultiSelect', ['ui.bootstrap'])
-.config(function($provide) {
-	$provide.decorator('daypickerDirective', function($delegate) {
+.config(['$provide', function($provide) {
+	$provide.decorator('daypickerDirective', ['$delegate', function($delegate) {
 		var directive = $delegate[0];
 		
 		/* Override compile */
@@ -61,8 +61,8 @@ angular.module('gm.datepickerMultiSelect', ['ui.bootstrap'])
 		}
 		
 		return $delegate;
-	});
-})
+	}]);
+}])
 .directive('multiSelect', function() {
 	return {
 		require: ['datepicker', 'ngModel'],
