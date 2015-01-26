@@ -65,7 +65,7 @@ angular.module('gm.datepickerMultiSelect', ['ui.bootstrap'])
 }])
 .directive('multiSelect', function() {
 	return {
-		require: ['datepicker', 'ngModel'],
+		require: ['ngModel'],
 		link: function(scope, elem, attrs, ctrls) {
 			var selectedDates;
 			
