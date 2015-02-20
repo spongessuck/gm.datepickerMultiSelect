@@ -1,0 +1,28 @@
+{
+  "name": "gm.datepickerMultiSelect",
+  "version": "1.0.3",
+  "homepage": "https://github.com/spongessuck/gm.datepickerMultiSelect",
+  "authors": [
+    "Greg McGee <spongessuck@gmail.com>"
+  ],
+  "description": "AngularJS module to extend UI Bootstrap's Datepicker directive to allow for multiple date selections.",
+  "main": "dist/gm.datepickerMultiSelect.min.js",
+  "moduleType": [
+    "node"
+  ],
+  "keywords": [
+    "angular",
+    "bootstrap",
+    "ui.bootstrap",
+    "datepicker",
+    "multiple"
+  ],
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ]
+}
