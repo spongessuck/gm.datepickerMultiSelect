@@ -93,5 +93,66 @@ SOFTWARE.
 				});
 			}
 		}
+	})
+	.directive('rangeSelect', function() {
+		return {
+			require: ['ngModel'],
+			link: function(scope, elem, attrs, ctrls) {
+				var selectedDates;
+
+				/* Called when directive is compiled */
+				scope.$on('requestSelectedDates', function() {
+					scope.$broadcast('update', selectedDates);
+				});
+
+				scope.$watchCollection(attrs.rangeSelect, function(newVal) {
+					selectedDates = newVal || [];
+					scope.$broadcast('update', selectedDates);
+				});
+
+				scope.$watch(attrs.ngModel, function(newVal, oldVal) {
+					if(!newVal) return;
+
+					var dateVal = newVal.getTime();
+
+					/* selected range cancellation */
+					if(selectedDates.length > 1)
+						angular.forEach(selectedDates, function(day) {
+							selectedDates.splice(selectedDates.indexOf(day), 1);
+						});
+
+					/* select a day for the first time */
+					if(!selectedDates.length)
+						return selectedDates.push(dateVal);
+
+					selectedDates.sort();
+					var prevVal = selectedDates[0];
+					var nextVal = selectedDates[selectedDates.length - 1];
+
+					var setNext = function () {
+						next = new Date(nextVal);
+						next.setDate(next.getDate() + 1);
+						nextVal = next.getTime();
+						selectedDates.push(nextVal);
+					};
+
+					var setPrev = function () {
+						prev = new Date(prevVal);
+						prev.setDate(prev.getDate() - 1);
+						prevVal = prev.getTime();
+						selectedDates.push(prevVal);
+					};
+
+					/* create a range */
+					if(dateVal > nextVal)
+						do setNext(); while (nextVal < dateVal);
+					else if (dateVal < nextVal)
+						do setPrev(); while (prevVal > dateVal);
+					else 
+						selectedDates.splice(selectedDates.indexOf(dateVal), 1);
+				});
+
+			}
+		}
 	});
 })();
