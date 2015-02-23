@@ -117,9 +117,8 @@ SOFTWARE.
 
 					/* selected range cancellation */
 					if(selectedDates.length > 1)
-						angular.forEach(selectedDates, function(day) {
-							selectedDates.splice(selectedDates.indexOf(day), 1);
-						});
+					  for(var i = selectedDates.length; i > 0; i--)
+							selectedDates.splice(selectedDates.indexOf(selectedDates[i]), 1);
 
 					/* select a day for the first time */
 					if(!selectedDates.length)
