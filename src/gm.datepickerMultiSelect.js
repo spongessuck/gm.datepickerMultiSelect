@@ -98,9 +98,15 @@ SOFTWARE.
 						
 						var tempVal = Math.min.apply(null, selectedDates);
 						var maxVal = Math.max.apply(null, selectedDates);
-						while(tempVal < maxVal) {
-							tempVal = new Date(tempVal).setHours(24);
+						
+						/* Start on the next day to prevent duplicating the 
+							first date */
+						tempVal = new Date(tempVal).setHours(24);
+					  while(tempVal < maxVal) {
   						selectedDates.push(tempVal);
+							/* Set a day ahead after pushing to prevent
+								duplicating last date */
+  						tempVal = new Date(tempVal).setHours(24);
 					  }
 				  } else {
   					if(selectedDates.indexOf(dateVal) < 0) {
