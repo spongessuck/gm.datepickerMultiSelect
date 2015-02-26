@@ -27,6 +27,16 @@ NOTE: Selected dates are stored as an array of time values, not date objects. An
 
     selectedDates.push(new Date().setHours(0, 0, 0, 0));
 
+##Date Ranges
+
+You can change the selection mode from individual dates to a date range by setting the select-range attribute to a truthy value or expression (that isn't a string equal to "false"):
+
+		<datepicker ng-model='activeDate' multi-select='selectedDates' select-range='true'><datepicker>
+
+After selecting a range, clicking a new date will reset the selection.
+
+##Demo
+
 <a href='http://plnkr.co/iVSdXt' target='_blank'>View demo on Plunker</a>
 
 Screenshot:

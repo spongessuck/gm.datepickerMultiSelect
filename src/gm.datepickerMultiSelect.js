@@ -80,15 +80,40 @@ SOFTWARE.
 					scope.$broadcast('update', selectedDates);
 				});
 
+				attrs.$observe('selectRange', function(newVal) {
+				  selectRange = !!newVal && newVal !== "false";
+				});
+
 				scope.$watch(attrs.ngModel, function(newVal, oldVal) {
 					if(!newVal) return;
 
 					var dateVal = newVal.getTime();
-
-					if(selectedDates.indexOf(dateVal) < 0) {
+					
+					if(selectRange) {
+					  /* reset range */
+  					if(!selectedDates.length || selectedDates.length > 1)
+  					  return selectedDates.splice(0, selectedDates.length, dateVal);
+  					
 						selectedDates.push(dateVal);
-					} else {
-						selectedDates.splice(selectedDates.indexOf(dateVal), 1);
+						
+						var tempVal = Math.min.apply(null, selectedDates);
+						var maxVal = Math.max.apply(null, selectedDates);
+						
+						/* Start on the next day to prevent duplicating the 
+							first date */
+						tempVal = new Date(tempVal).setHours(24);
+					  while(tempVal < maxVal) {
+  						selectedDates.push(tempVal);
+							/* Set a day ahead after pushing to prevent
+								duplicating last date */
+  						tempVal = new Date(tempVal).setHours(24);
+					  }
+				  } else {
+  					if(selectedDates.indexOf(dateVal) < 0) {
+  						selectedDates.push(dateVal);
+  					} else {
+  						selectedDates.splice(selectedDates.indexOf(dateVal), 1);
+  					}
 					}
 				});
 			}
