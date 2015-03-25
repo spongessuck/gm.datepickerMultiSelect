@@ -69,6 +69,7 @@ SOFTWARE.
 			require: ['ngModel'],
 			link: function(scope, elem, attrs, ctrls) {
 				var selectedDates;
+				var selectRange;
 
 				/* Called when directive is compiled */
 				scope.$on('requestSelectedDates', function() {
@@ -88,18 +89,18 @@ SOFTWARE.
 					if(!newVal) return;
 
 					var dateVal = newVal.getTime();
-					
+
 					if(selectRange) {
 					  /* reset range */
   					if(!selectedDates.length || selectedDates.length > 1)
   					  return selectedDates.splice(0, selectedDates.length, dateVal);
-  					
+
 						selectedDates.push(dateVal);
-						
+
 						var tempVal = Math.min.apply(null, selectedDates);
 						var maxVal = Math.max.apply(null, selectedDates);
-						
-						/* Start on the next day to prevent duplicating the 
+
+						/* Start on the next day to prevent duplicating the
 							first date */
 						tempVal = new Date(tempVal).setHours(24);
 					  while(tempVal < maxVal) {
