@@ -38,9 +38,10 @@ SOFTWARE.
 					var selectedDates = [];
 
 					/* Called when multiSelect model is updated */
-					scope.$on('update', function(event, newDates) {
+					scope.$on('update', function(event, newDates, ownScope) {
 						selectedDates = newDates;
-						update();
+						if(ownScope==scope)
+							update();
 					});
 
 					/* Get dates pushed into multiSelect array before Datepicker is ready */
@@ -73,7 +74,7 @@ SOFTWARE.
 
 				/* Called when directive is compiled */
 				scope.$on('requestSelectedDates', function() {
-					scope.$broadcast('update', selectedDates);
+					scope.$broadcast('update', selectedDates, scope);
 				});
 
 				scope.$watchCollection(attrs.multiSelect, function(newVal) {
