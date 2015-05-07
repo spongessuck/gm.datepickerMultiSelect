@@ -1,7 +1,7 @@
 /*
 The MIT License (MIT)
 
-Copyright (c) 2014 Gregory McGee
+Copyright (c) 2014 Gregory McGee / Daniel Neri
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -54,7 +54,18 @@ SOFTWARE.
 					function update() {
 						angular.forEach(scope.rows, function(row) {
 							angular.forEach(row, function(day) {
-								day.selected = selectedDates.indexOf(day.date.setHours(0, 0, 0, 0)) > -1
+								var selectedDateIndex = selectedDates.indexOf(day.date.setHours(12, 0, 0, 0));
+								if(selectedDateIndex > -1) {
+									day.overrideDisabled = true;
+									day.selected = true;
+								}else{
+									day.overrideDisabled = false;
+									day.selected = false;
+								}
+
+								day.firstInRange = (selectedDateIndex === 0) ? true : false;
+								day.lastInRange = (selectedDateIndex === selectedDates.length - 1) ? true : false;
+								
 							});
 						});
 					}
@@ -64,20 +75,13 @@ SOFTWARE.
 			return $delegate;
 		}]);
 	}])
-	.directive('multiSelect', function() {
+	.directive('selectRange', function() {
 		return {
-			require: ['ngModel'],
 			link: function(scope, elem, attrs, ctrls) {
 				var selectedDates;
-				var selectRange;
 
 				/* Called when directive is compiled */
 				scope.$on('requestSelectedDates', function() {
-					scope.$broadcast('update', selectedDates);
-				});
-
-				scope.$watchCollection(attrs.multiSelect, function(newVal) {
-					selectedDates = newVal || [];
 					scope.$broadcast('update', selectedDates);
 				});
 
@@ -86,36 +90,26 @@ SOFTWARE.
 				});
 
 				scope.$watch(attrs.ngModel, function(newVal, oldVal) {
-					if(!newVal) return;
 
-					var dateVal = newVal.getTime();
+					if (!newVal) return;
 
-					if(selectRange) {
-					  /* reset range */
-  					if(!selectedDates.length || selectedDates.length > 1)
-  					  return selectedDates.splice(0, selectedDates.length, dateVal);
+					if (angular.isUndefined(scope.selectedRange)) selectedRange = 0;
 
-						selectedDates.push(dateVal);
+					selectedDates = [];
 
-						var tempVal = Math.min.apply(null, selectedDates);
-						var maxVal = Math.max.apply(null, selectedDates);
+					var dateVal = angular.copy(newVal);
+					dateVal.setHours(12,0,0,0);
 
-						/* Start on the next day to prevent duplicating the
-							first date */
-						tempVal = new Date(tempVal).setHours(24);
-					  while(tempVal < maxVal) {
-  						selectedDates.push(tempVal);
-							/* Set a day ahead after pushing to prevent
-								duplicating last date */
-  						tempVal = new Date(tempVal).setHours(24);
-					  }
-				  } else {
-  					if(selectedDates.indexOf(dateVal) < 0) {
-  						selectedDates.push(dateVal);
-  					} else {
-  						selectedDates.splice(selectedDates.indexOf(dateVal), 1);
-  					}
+					selectedDates.push(dateVal.getTime());
+
+					for(var i = 0; i < (scope.selectRange - 1); i++) {
+						var d = new Date(angular.copy(selectedDates[i]));
+						d.setDate(d.getDate() + 1);
+						selectedDates.push(d.getTime());
+
 					}
+
+					scope.$broadcast('update', selectedDates);
 				});
 			}
 		}
