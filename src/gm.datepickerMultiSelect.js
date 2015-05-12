@@ -54,6 +54,9 @@ SOFTWARE.
 					function update() {
 						angular.forEach(scope.rows, function(row) {
 							angular.forEach(row, function(day) {
+
+								if(angular.isUndefined(selectedDates)) selectedDates = [];
+								
 								var selectedDateIndex = selectedDates.indexOf(day.date.setHours(12, 0, 0, 0));
 								if(selectedDateIndex > -1) {
 									day.overrideDisabled = true;
