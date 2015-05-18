@@ -52,6 +52,11 @@ SOFTWARE.
 					}, update);
 
 					function update() {
+
+						if( scope.$parent.$parent.selectRange === false ) {
+							return;
+						}
+
 						angular.forEach(scope.rows, function(row) {
 							angular.forEach(row, function(day) {
 
@@ -85,6 +90,11 @@ SOFTWARE.
 
 				/* Called when directive is compiled */
 				scope.$on('requestSelectedDates', function() {
+
+					if (angular.isUndefined(scope.selectRange) || scope.selectRange === false) {
+						return;
+					}
+
 					scope.$broadcast('update', selectedDates);
 				});
 
@@ -96,7 +106,13 @@ SOFTWARE.
 
 					if (!newVal) return;
 
-					if (angular.isUndefined(scope.selectedRange)) selectedRange = 0;
+					if (angular.isUndefined(scope.selectRange) || scope.selectRange === false) {
+						return;
+					}
+
+					if( isNaN(scope.selectRange)) {
+						scope.selectRange = 0;
+					};
 
 					selectedDates = [];
 
