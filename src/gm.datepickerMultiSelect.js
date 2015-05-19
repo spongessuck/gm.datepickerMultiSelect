@@ -47,15 +47,13 @@ SOFTWARE.
 					scope.$emit('requestSelectedDates');
 
 					/* Fires when date is selected or when month is changed. */
-					scope.$watch(function () {
-						return ctrl.activeDate.getTime();
-					}, update);
+					if( angular.isDefined(scope.$parent.$parent.selectRange) && scope.$parent.$parent.selectRange !== false ) {
+						scope.$watch(function () {
+							return ctrl.activeDate.getTime();
+						}, update);
+					}
 
 					function update() {
-
-						if( scope.$parent.$parent.selectRange === false ) {
-							return;
-						}
 
 						angular.forEach(scope.rows, function(row) {
 							angular.forEach(row, function(day) {
