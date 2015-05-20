@@ -47,11 +47,11 @@ SOFTWARE.
 					scope.$emit('requestSelectedDates');
 
 					/* Fires when date is selected or when month is changed. */
-					if( angular.isDefined(scope.$parent.$parent.selectRange) && scope.$parent.$parent.selectRange !== false ) {
-						scope.$watch(function () {
-							return ctrl.activeDate.getTime();
-						}, update);
-					}
+					// if( angular.isDefined(scope.$parent.$parent.selectRange) && scope.$parent.$parent.selectRange !== false ) {
+					// 	scope.$watch(function () {
+					// 		return ctrl.activeDate.getTime();
+					// 	}, update);
+					// }
 
 					function update() {
 
@@ -87,11 +87,13 @@ SOFTWARE.
 				var selectedDates;
 
 				/* Called when directive is compiled */
-				scope.$on('requestSelectedDates', function() {
+				scope.$on('requestSelectedDates', function(event) {
 
 					if (angular.isUndefined(scope.selectRange) || scope.selectRange === false) {
 						return;
 					}
+
+					event.stopPropagation();
 
 					scope.$broadcast('update', selectedDates);
 				});
