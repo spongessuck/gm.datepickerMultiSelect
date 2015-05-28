@@ -15,7 +15,7 @@ Once the script is included in your html file, simply include the module in your
 
 And use the included 'multiSelect' directive thusly:
 
-    <datepicker ng-model='activeDate' multi-select='selectedDates'><datepicker>
+    <datepicker ng-model='activeDate' multi-select='selectedDates'></datepicker>
 
 The directive binds an array holding any dates selected in the Datepicker to the specified property on the controller (or its scope).
 
@@ -31,7 +31,7 @@ NOTE: Selected dates are stored as an array of time values, not date objects. An
 
 You can change the selection mode from individual dates to a date range by setting the select-range attribute to a truthy value or expression (that isn't a string equal to "false"):
 
-		<datepicker ng-model='activeDate' multi-select='selectedDates' select-range='true'><datepicker>
+		<datepicker ng-model='activeDate' multi-select='selectedDates' select-range='true'></datepicker>
 
 After selecting a range, clicking a new date will reset the selection.
 
