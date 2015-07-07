@@ -92,7 +92,7 @@ SOFTWARE.
 
 					if(selectRange) {
 					  /* reset range */
-  					if(!selectedDates.length || selectedDates.length > 1)
+  					if(!selectedDates.length || selectedDates.length > 1 || selectedDates[0] == dateVal)
   					  return selectedDates.splice(0, selectedDates.length, dateVal);
 
 						selectedDates.push(dateVal);
