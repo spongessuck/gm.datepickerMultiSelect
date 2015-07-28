@@ -19,9 +19,9 @@ And use the included 'multiSelect' directive thusly:
 
 The directive binds an array holding any dates selected in the Datepicker to the specified property on the controller (or its scope).
 
-Tested in AngularJS 1.2.25 and 1.3.1, and UI Bootstrap 0.11.x.
+Click a selected date to de-select it.
 
-Also supports toggling.
+Tested in AngularJS 1.2.25 and 1.3.1, and UI Bootstrap 0.11. This directive will **not** work properly with UI Bootstrap 0.10.
 
 NOTE: Selected dates are stored as an array of time values, not date objects. Any time values pushed into the multiSelect array programmatically must correspond to midnight on the desired date. This can be done using the Date object's "setHours" function, which conveniently returns a time value. For example, the following code would select today's date:
 
