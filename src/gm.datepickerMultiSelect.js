@@ -68,8 +68,9 @@ SOFTWARE.
 		return {
 			require: ['ngModel'],
 			link: function(scope, elem, attrs, ctrls) {
-				var selectedDates;
-				var selectRange;
+				var selectedDates,
+				    selectRange,
+				    sort;
 
 				/* Called when directive is compiled */
 				scope.$on('requestSelectedDates', function() {
@@ -83,6 +84,10 @@ SOFTWARE.
 
 				attrs.$observe('selectRange', function(newVal) {
 				  selectRange = !!newVal && newVal !== "false";
+				});
+
+				attrs.$observe(‘sort’, function(newVal) {
+				  sort = !!newVal && newVal !== "false";
 				});
 
 				scope.$watch(attrs.ngModel, function(newVal, oldVal) {
@@ -109,9 +114,15 @@ SOFTWARE.
 								duplicating last date */
   						tempVal = new Date(tempVal).setHours(24);
 					  }
+
+					  /* we sort it everytime since attr sort could be false earlier */
+					  if (sort) selectedDates.sort();
 				  } else {
   					if(selectedDates.indexOf(dateVal) < 0) {
   						selectedDates.push(dateVal);
+
+  						/* we sort it everytime since attr sort could be false earlier */
+  						if (sort) selectedDates.sort();
   					} else {
   						selectedDates.splice(selectedDates.indexOf(dateVal), 1);
   					}
