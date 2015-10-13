@@ -24,8 +24,8 @@ SOFTWARE.
 
 (function() {
 	angular.module('gm.datepickerMultiSelect', ['ui.bootstrap'])
-	.config(['$provide', function($provide) {
-		$provide.decorator('daypickerDirective', ['$delegate', function($delegate) {
+	.config(['$provide', '$injector', function($provide, $injector) {
+		var delegate = function($delegate) {
 			var directive = $delegate[0];
 
 			/* Override compile */
@@ -48,7 +48,7 @@ SOFTWARE.
 
 					/* Fires when date is selected or when month is changed. */
 					scope.$watch(function () {
-						return ctrl.activeDate.getTime();
+						return ctrl.activeDate ? ctrl.activeDate.getTime() : false;
 					}, update);
 
 					function update() {
@@ -62,7 +62,13 @@ SOFTWARE.
 			}
 
 			return $delegate;
-		}]);
+		}
+		
+		if ($injector.has('daypickerDirective'))
+			$provide.decorator('daypickerDirective', ['$delegate', delegate]);
+		
+		if ($injector.has('uibDaypickerDirective'))
+			$provide.decorator('uibDaypickerDirective', ['$delegate', delegate]);
 	}])
 	.directive('multiSelect', function() {
 		return {
