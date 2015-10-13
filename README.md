@@ -21,7 +21,12 @@ The directive binds an array holding any dates selected in the Datepicker to the
 
 Click a selected date to de-select it.
 
-Tested in AngularJS 1.2.25 and 1.3.1, and UI Bootstrap 0.11. This directive will **not** work properly with UI Bootstrap 0.10.
+Tested in
+ * AngularJS 1.2.25 and UI Bootstrap 0.11.0
+ * AngularJS 1.3.1 and UI Bootstrap 0.11.0
+ * AngularJS 1.4.7 and UI Bootstrap 0.14.1
+ 
+This directive will **not** work properly with UI Bootstrap 0.10.
 
 NOTE: Selected dates are stored as an array of time values, not date objects. Any time values pushed into the multiSelect array programmatically must correspond to midnight on the desired date. This can be done using the Date object's "setHours" function, which conveniently returns a time value. For example, the following code would select today's date:
 

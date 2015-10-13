@@ -24,15 +24,15 @@ SOFTWARE.
 
 (function() {
 	angular.module('gm.datepickerMultiSelect', ['ui.bootstrap'])
-	.config(['$provide', function($provide) {
-		$provide.decorator('daypickerDirective', ['$delegate', function($delegate) {
+	.config(['$provide', '$injector', function($provide, $injector) {
+		var delegate = function($delegate) {
 			var directive = $delegate[0];
 
 			/* Override compile */
 			var link = directive.link;
 
 			directive.compile = function() {
-				return function(scope, element, attrs, ctrl) {
+				return function(scope, element, attrs, ctrls) {
 					link.apply(this, arguments);
 
 					var selectedDates = [];
@@ -46,9 +46,17 @@ SOFTWARE.
 					/* Get dates pushed into multiSelect array before Datepicker is ready */
 					scope.$emit('requestSelectedDates');
 
-					/* Fires when date is selected or when month is changed. */
+					/*
+						Fires when date is selected or when month is changed.
+						UI bootstrap versions before 0.14.0 had just one controller DatepickerController,
+						now they have UibDatepickerController, UibDaypickerController and DatepickerController
+						see more on https://github.com/angular-ui/bootstrap/commit/44354f67e55c571df28b09e26a314a845a3b7397?diff=split#diff-6240fc17e068eaeef7095937a1d63eaeL251
+						and https://github.com/angular-ui/bootstrap/commit/44354f67e55c571df28b09e26a314a845a3b7397?diff=split#diff-6240fc17e068eaeef7095937a1d63eaeR462
+					*/
 					scope.$watch(function () {
-						return ctrl.activeDate.getTime();
+						return angular.isArray(ctrls)
+							? ctrls[0].activeDate.getTime()
+							: ctrls.activeDate.getTime();
 					}, update);
 
 					function update() {
@@ -62,7 +70,13 @@ SOFTWARE.
 			}
 
 			return $delegate;
-		}]);
+		}
+		
+		if ($injector.has('daypickerDirective'))
+			$provide.decorator('daypickerDirective', ['$delegate', delegate]);
+		
+		if ($injector.has('uibDaypickerDirective'))
+			$provide.decorator('uibDaypickerDirective', ['$delegate', delegate]);
 	}])
 	.directive('multiSelect', function() {
 		return {

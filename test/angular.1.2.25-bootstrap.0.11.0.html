@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:ng="http://angularjs.org" id="ng-app" ng-app="app">
+<head>
+	<meta charset="utf-8">
+    <title>gm.datepickerMultiSelect Example</title>
+	
+	<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.2.25/angular.min.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/angular-ui-bootstrap/0.11.0/ui-bootstrap-tpls.min.js"></script>
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css" />
+	
+<!-- App files -->
+	<script src="../dist/gm.datepickerMultiSelect.min.js"></script>
+	<script src="../modules/app.js"></script>
+	<style>
+		body { padding:10px; }
+		td { vertical-align: top }
+	</style>
+</head>
+
+<body ng-controller='AppCtrl as app'>
+  <div class='panel'><h3>Selection Type:</h3>
+      <div class='btn-group'>
+        <button class='btn btn-primary' ng-model='app.type' btn-radio='"individual"'>Individual</button>
+        <button class='btn btn-primary' ng-model='app.type' btn-radio='"range"'>Range</button>
+      </div>
+    </div>
+    <table>
+      <tr>
+        <td>
+          <datepicker ng-model='app.activeDate' multi-select='app.selectedDates' select-range='{{app.type=="range"}}'></datepicker>
+        </td>
+        <td style='width:50px'>
+        </td>
+        <td>
+          <div>
+            Selected Dates:
+            <div class='well well-sm'>
+              <div ng-repeat='d in app.selectedDates'>
+                {{d | date : 'fullDate'}}
+                <button class='btn btn-xs btn-warning' style='margin:5px' ng-click='app.removeFromSelected(d)'>Remove</button>
+              </div>
+            </div>
+          </div>
+        </td>
+      </tr>
+    </table>
+</body>
+</html>
