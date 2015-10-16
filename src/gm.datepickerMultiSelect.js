@@ -22,29 +22,90 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
 
-(function() {
+(function () {
+	'use strict';
+	
 	angular.module('gm.datepickerMultiSelect', ['ui.bootstrap'])
-	.config(['$provide', '$injector', function($provide, $injector) {
-		var delegate = function($delegate) {
+	.config(['$provide', '$injector', function ($provide, $injector) {
+
+		// extending datepicker (access to attributes and app scope through $parent)
+		var datepickerDelegate = function ($delegate) {
 			var directive = $delegate[0];
 
-			/* Override compile */
+			// Override compile
 			var link = directive.link;
 
-			directive.compile = function() {
-				return function(scope, element, attrs, ctrls) {
+			directive.compile = function () {
+				return function (scope, element, attrs, ctrls) {
 					link.apply(this, arguments);
 
-					var selectedDates = [];
+					scope.selectedDates = [];
+					scope.selectRange;
 
-					/* Called when multiSelect model is updated */
-					scope.$on('update', function(event, newDates) {
-						selectedDates = newDates;
-						update();
+					scope.$parent.$watchCollection(attrs.multiSelect, function (newVal) {
+						scope.selectedDates = newVal || [];
 					});
 
-					/* Get dates pushed into multiSelect array before Datepicker is ready */
-					scope.$emit('requestSelectedDates');
+					attrs.$observe('selectRange', function (newVal) {
+						scope.selectRange = !!newVal && newVal !== "false";
+					});
+
+					scope.$parent.$watch(attrs.ngModel, function (newVal, oldVal) {
+						if (!newVal) return;
+
+						var dateVal = newVal.getTime(),
+							selectedDates = scope.selectedDates;
+
+						if (scope.selectRange) {
+							// reset range
+							if (!selectedDates.length || selectedDates.length > 1 || selectedDates[0] == dateVal)
+								return selectedDates.splice(0, selectedDates.length, dateVal);
+
+							selectedDates.push(dateVal);
+
+							var tempVal = Math.min.apply(null, selectedDates);
+							var maxVal = Math.max.apply(null, selectedDates);
+
+							// Start on the next day to prevent duplicating the	first date
+							tempVal = new Date(tempVal).setHours(24);
+							while (tempVal < maxVal) {
+								selectedDates.push(tempVal);
+
+								// Set a day ahead after pushing to prevent duplicating last date
+								tempVal = new Date(tempVal).setHours(24);
+							}
+						} else {
+							if (selectedDates.indexOf(dateVal) < 0) {
+								selectedDates.push(dateVal);
+							} else {
+								selectedDates.splice(selectedDates.indexOf(dateVal), 1);
+							}
+						}
+					});
+				}
+			}
+
+			return $delegate;
+		}
+
+		if ($injector.has('datepickerDirective'))
+			$provide.decorator('datepickerDirective', ['$delegate', datepickerDelegate]);
+
+		if ($injector.has('uibDatepickerDirective'))
+			$provide.decorator('uibDatepickerDirective', ['$delegate', datepickerDelegate]);
+
+		// extending daypicker (access to day and datepicker scope through $parent)
+		var daypickerDelegate = function ($delegate) {
+			var directive = $delegate[0];
+
+			// Override compile
+			var link = directive.link;
+
+			directive.compile = function () {
+				return function (scope, element, attrs, ctrls) {
+					link.apply(this, arguments);
+
+					scope.$parent.$watchCollection('selectedDates', update);
 
 					/*
 						Fires when date is selected or when month is changed.
@@ -53,16 +114,15 @@ SOFTWARE.
 						see more on https://github.com/angular-ui/bootstrap/commit/44354f67e55c571df28b09e26a314a845a3b7397?diff=split#diff-6240fc17e068eaeef7095937a1d63eaeL251
 						and https://github.com/angular-ui/bootstrap/commit/44354f67e55c571df28b09e26a314a845a3b7397?diff=split#diff-6240fc17e068eaeef7095937a1d63eaeR462
 					*/
+					var ctrl = angular.isArray(ctrls) ? ctrls[0] : ctrls;
 					scope.$watch(function () {
-						return angular.isArray(ctrls)
-							? ctrls[0].activeDate.getTime()
-							: ctrls.activeDate.getTime();
+						return ctrl.activeDate.getTime();
 					}, update);
 
 					function update() {
-						angular.forEach(scope.rows, function(row) {
-							angular.forEach(row, function(day) {
-								day.selected = selectedDates.indexOf(day.date.setHours(0, 0, 0, 0)) > -1
+						angular.forEach(scope.rows, function (row) {
+							angular.forEach(row, function (day) {
+								day.selected = scope.selectedDates.indexOf(day.date.setHours(0, 0, 0, 0)) > -1
 							});
 						});
 					}
@@ -71,67 +131,11 @@ SOFTWARE.
 
 			return $delegate;
 		}
-		
+
 		if ($injector.has('daypickerDirective'))
-			$provide.decorator('daypickerDirective', ['$delegate', delegate]);
-		
+			$provide.decorator('daypickerDirective', ['$delegate', daypickerDelegate]);
+
 		if ($injector.has('uibDaypickerDirective'))
-			$provide.decorator('uibDaypickerDirective', ['$delegate', delegate]);
-	}])
-	.directive('multiSelect', function() {
-		return {
-			require: ['ngModel'],
-			link: function(scope, elem, attrs, ctrls) {
-				var selectedDates;
-				var selectRange;
-
-				/* Called when directive is compiled */
-				scope.$on('requestSelectedDates', function() {
-					scope.$broadcast('update', selectedDates);
-				});
-
-				scope.$watchCollection(attrs.multiSelect, function(newVal) {
-					selectedDates = newVal || [];
-					scope.$broadcast('update', selectedDates);
-				});
-
-				attrs.$observe('selectRange', function(newVal) {
-				  selectRange = !!newVal && newVal !== "false";
-				});
-
-				scope.$watch(attrs.ngModel, function(newVal, oldVal) {
-					if(!newVal) return;
-
-					var dateVal = newVal.getTime();
-
-					if(selectRange) {
-					  /* reset range */
-  					if(!selectedDates.length || selectedDates.length > 1 || selectedDates[0] == dateVal)
-  					  return selectedDates.splice(0, selectedDates.length, dateVal);
-
-						selectedDates.push(dateVal);
-
-						var tempVal = Math.min.apply(null, selectedDates);
-						var maxVal = Math.max.apply(null, selectedDates);
-
-						/* Start on the next day to prevent duplicating the
-							first date */
-						tempVal = new Date(tempVal).setHours(24);
-					  while(tempVal < maxVal) {
-  						selectedDates.push(tempVal);
-							/* Set a day ahead after pushing to prevent
-								duplicating last date */
-  						tempVal = new Date(tempVal).setHours(24);
-					  }
-				  } else {
-  					if(selectedDates.indexOf(dateVal) < 0) {
-  						selectedDates.push(dateVal);
-  					} else {
-  						selectedDates.splice(selectedDates.indexOf(dateVal), 1);
-  					}
-					}
-				});
-			}
-		}
-	});
+			$provide.decorator('uibDaypickerDirective', ['$delegate', daypickerDelegate]);
+	}]);
 })();

@@ -32,10 +32,6 @@ NOTE: Selected dates are stored as an array of time values, not date objects. An
 
     selectedDates.push(new Date().setHours(0, 0, 0, 0));
 
-##Issues
-
-There is a known issue when using this directive while more than one datepicker is visible. Changing selected dates on a datepicker will *look* like it's changing dates on all others that are visible, although the models aren't actually affected. This is due to the datepicker directive's controller scope being altered in order to show the selected dates in their 'active' state, which (it seems) is shared between all instances.
-
 ##Date Ranges
 
 You can change the selection mode from individual dates to a date range by setting the select-range attribute to a truthy value or expression (that isn't a string equal to "false"):
