@@ -32,6 +32,10 @@ NOTE: Selected dates are stored as an array of time values, not date objects. An
 
     selectedDates.push(new Date().setHours(0, 0, 0, 0));
 
+##Issues
+
+Version 1.0.8 of this module is not compatible with the (uib-)datepicker-popup directive. If you need to use it, please use v1.0.7.
+
 ##Date Ranges
 
 You can change the selection mode from individual dates to a date range by setting the select-range attribute to a truthy value or expression (that isn't a string equal to "false"):
