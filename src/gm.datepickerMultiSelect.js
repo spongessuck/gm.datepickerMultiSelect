@@ -22,7 +22,7 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
 
-(function () {
+(function (angular) {
 	'use strict';
 	
 	angular.module('gm.datepickerMultiSelect', ['ui.bootstrap'])
@@ -50,8 +50,12 @@ SOFTWARE.
 						scope.selectRange = !!newVal && newVal !== "false";
 					});
 
-					scope.$parent.$watch(attrs.ngModel, function (newVal, oldVal) {
-						if (!newVal) return;
+					var ngModelCtrl = ctrls[1];
+
+					ngModelCtrl.$viewChangeListeners.push(function() {
+						var newVal = scope.$parent.$eval(attrs.ngModel);
+						if(!newVal)
+							return;
 
 						var dateVal = newVal.getTime(),
 							selectedDates = scope.selectedDates;
@@ -138,4 +142,4 @@ SOFTWARE.
 		if ($injector.has('uibDaypickerDirective'))
 			$provide.decorator('uibDaypickerDirective', ['$delegate', daypickerDelegate]);
 	}]);
-})();
+})(window.angular);
