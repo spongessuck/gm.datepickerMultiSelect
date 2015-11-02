@@ -111,8 +111,8 @@ SOFTWARE.
 				return function (scope, element, attrs, ctrls) {
 					link.apply(this, arguments);
 
-					if(!angular.isDefined(attrs.multiSelect)) return;
-					
+					if(!angular.isDefined(scope.$parent.selectedDates)) return;
+
 					scope.$parent.$watchCollection('selectedDates', update);
 
 					/*
