@@ -39,6 +39,8 @@ SOFTWARE.
 				return function (scope, element, attrs, ctrls) {
 					link.apply(this, arguments);
 
+					if(!angular.isDefined(attrs.multiSelect)) return;
+
 					scope.selectedDates = [];
 					scope.selectRange;
 
@@ -108,6 +110,8 @@ SOFTWARE.
 			directive.compile = function () {
 				return function (scope, element, attrs, ctrls) {
 					link.apply(this, arguments);
+
+					if(!angular.isDefined(scope.$parent.selectedDates)) return;
 
 					scope.$parent.$watchCollection('selectedDates', update);
 
