@@ -83,8 +83,11 @@ SOFTWARE.
 						} else {
 							if (selectedDates.indexOf(dateVal) < 0) {
 								selectedDates.push(dateVal);
+								scope.$emit('gm.datepickerMultiSelect.selectDate', dateVal, selectedDates.indexOf(dateVal));
 							} else {
-								selectedDates.splice(selectedDates.indexOf(dateVal), 1);
+								var index = selectedDates.indexOf(dateVal);
+								selectedDates.splice(index, 1);
+								scope.$emit('gm.datepickerMultiSelect.deselectDate', dateVal, index);
 							}
 						}
 					});
