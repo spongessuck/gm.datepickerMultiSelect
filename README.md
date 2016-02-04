@@ -26,7 +26,7 @@ Tested in
  * AngularJS 1.3.1 and UI Bootstrap 0.11.0
  * AngularJS 1.4.7 and UI Bootstrap 0.14.1
  
-This directive will **not** work properly with UI Bootstrap 0.10.
+This directive will **not** work properly with UI Bootstrap 0.10.x.
 
 NOTE: Selected dates are stored as an array of time values, not date objects. Any time values pushed into the multiSelect array programmatically must correspond to midnight on the desired date. This can be done using the Date object's "setHours" function, which conveniently returns a time value. For example, the following code would select today's date:
 
@@ -35,6 +35,8 @@ NOTE: Selected dates are stored as an array of time values, not date objects. An
 ##Issues
 
 Version 1.0.8 of this module is not compatible with the (uib-)datepicker-popup directive. If you need to use it, please use v1.0.7.
+
+The styling of the selected date buttons is broken as of UI Bootstrap 1.0.0 due to breaking changes in the template due to [angular-ui/bootstrap@72f13ef](https://github.com/angular-ui/bootstrap/commit/72f13ef38b1f460dc7d288a45368e2d0b6df093d). The temporary solution is to replace the day.html template with one based on `ng-class`. See issue [#39](https://github.com/spongessuck/gm.datepickerMultiSelect/issues/39) for an example.
 
 ##Date Ranges
 
