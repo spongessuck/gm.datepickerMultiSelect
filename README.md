@@ -3,9 +3,9 @@ gm.datepickerMultiSelect
 
 gm.datepickerMultiSelect is an AngularJS module that extends UI Bootstrap's Datepicker directive to allow for multiple date selections.
 
-##Install from Bower
+##Install from NPM or Bower
 
-		$ bower install gm.datepicker-multi-select --save
+		$ (npm || bower) install gm.datepicker-multi-select --save
 
 ##Usage
 
