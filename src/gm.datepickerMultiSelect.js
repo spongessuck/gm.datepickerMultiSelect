@@ -59,7 +59,7 @@ SOFTWARE.
 						if(!newVal)
 							return;
 
-						var dateVal = newVal.getTime(),
+						var dateVal = newVal.setHours(0, 0, 0, 0),
 							selectedDates = scope.selectedDates;
 
 						if (scope.selectRange) {
