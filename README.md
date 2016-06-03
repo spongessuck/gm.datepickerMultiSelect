@@ -48,7 +48,7 @@ After selecting a range, clicking a new date will reset the selection.
 
 ##Demo
 
-<a href='http://plnkr.co/iVSdXt' target='_blank'>View demo on Plunker</a>
+<a href='http://plnkr.co/edit/AdPLKA?p=preview' target='_blank'>View demo on Plunker</a>
 
 Screenshot:
 ![Alt text](screenshot.png "Screenshot")
