@@ -24,8 +24,8 @@ SOFTWARE.
 
 (function (angular) {
 	'use strict';
-	
-	angular.module('gm.datepickerMultiSelect', ['ui.bootstrap'])
+
+	angular.module('gm.datepickerMultiSelect', ['ui.bootstrap.datepicker'])
 	.config(['$provide', '$injector', function ($provide, $injector) {
 
 		// extending datepicker (access to attributes and app scope through $parent)
