@@ -2,9 +2,10 @@
 	'use strict';
 	
 	angular.module('app', ['gm.datepickerMultiSelect'])
-	.controller('AppCtrl', function() {
+	.controller('AppCtrl', function($filter) {
+		var today = Date.parse($filter('gmISODate')(new Date()))
 		this.activeDate;
-		this.selectedDates = [new Date().setHours(0, 0, 0, 0)];
+		this.selectedDates = [today];
 		this.type = 'individual';
 		
 		this.removeFromSelected = function(dt) {
@@ -12,7 +13,8 @@
 		}
 		
 		this.activeDate1;
-		this.selectedDates1 = [new Date().setHours(24, 0, 0, 0)];
+		var tomorrow = Date.parse($filter('gmISODate')(new Date().setHours(24, 0, 0, 0)))
+		this.selectedDates1 = [tomorrow];
 		this.type1 = 'individual';
 		
 		this.removeFromSelected1 = function(dt) {
