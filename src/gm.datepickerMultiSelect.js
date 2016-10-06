@@ -24,12 +24,19 @@ SOFTWARE.
 
 (function (angular) {
 	'use strict';
-
-	angular.module('gm.datepickerMultiSelect', ['ui.bootstrap.datepicker'])
+	
+	angular.module('gm.datepickerMultiSelect', ['ui.bootstrap'])
+	.filter('gmISODate', function() {
+	  return function(date) {
+	    return date.toISOString().split("T")[0];
+	  }
+	})
 	.config(['$provide', '$injector', function ($provide, $injector) {
+	  
+	  var useUTC = false;
 
 		// extending datepicker (access to attributes and app scope through $parent)
-		var datepickerDelegate = function ($delegate) {
+		var datepickerDelegate = function ($delegate, $filter) {
 			var directive = $delegate[0];
 
 			// Override compile
@@ -38,8 +45,6 @@ SOFTWARE.
 			directive.compile = function () {
 				return function (scope, element, attrs, ctrls) {
 					link.apply(this, arguments);
-
-					if(!angular.isDefined(attrs.multiSelect)) return;
 
 					scope.selectedDates = [];
 					scope.selectRange;
@@ -58,8 +63,8 @@ SOFTWARE.
 						var newVal = scope.$parent.$eval(attrs.ngModel);
 						if(!newVal)
 							return;
-
-						var dateVal = newVal.setHours(0, 0, 0, 0),
+							
+						var dateVal = Date.parse($filter('gmISODate')(newVal)), //useUTC ? new Date(newVal).setUTCHours(0, 0, 0, 0) : new Date(newVal).setHours(0, 0, 0, 0),
 							selectedDates = scope.selectedDates;
 
 						if (scope.selectRange) {
@@ -73,12 +78,12 @@ SOFTWARE.
 							var maxVal = Math.max.apply(null, selectedDates);
 
 							// Start on the next day to prevent duplicating the	first date
-							tempVal = new Date(tempVal).setHours(24);
+							tempVal += 1000 * 60 * 60 * 24;
 							while (tempVal < maxVal) {
 								selectedDates.push(tempVal);
 
 								// Set a day ahead after pushing to prevent duplicating last date
-								tempVal = new Date(tempVal).setHours(24);
+								tempVal += 1000 * 60 * 60 * 24;
 							}
 						} else {
 							if (selectedDates.indexOf(dateVal) < 0) {
@@ -88,20 +93,20 @@ SOFTWARE.
 							}
 						}
 					});
-				}
-			}
+				};
+			};
 
 			return $delegate;
-		}
+		};
 
 		if ($injector.has('datepickerDirective'))
-			$provide.decorator('datepickerDirective', ['$delegate', datepickerDelegate]);
+			$provide.decorator('datepickerDirective', ['$delegate', '$filter', datepickerDelegate]);
 
 		if ($injector.has('uibDatepickerDirective'))
-			$provide.decorator('uibDatepickerDirective', ['$delegate', datepickerDelegate]);
+			$provide.decorator('uibDatepickerDirective', ['$delegate', '$filter', datepickerDelegate]);
 
 		// extending daypicker (access to day and datepicker scope through $parent)
-		var daypickerDelegate = function ($delegate) {
+		var daypickerDelegate = function ($delegate, $filter) {
 			var directive = $delegate[0];
 
 			// Override compile
@@ -110,8 +115,6 @@ SOFTWARE.
 			directive.compile = function () {
 				return function (scope, element, attrs, ctrls) {
 					link.apply(this, arguments);
-
-					if(!angular.isDefined(scope.$parent.selectedDates)) return;
 
 					scope.$parent.$watchCollection('selectedDates', update);
 
@@ -126,24 +129,25 @@ SOFTWARE.
 					scope.$watch(function () {
 						return ctrl.activeDate.getTime();
 					}, update);
-
+					
 					function update() {
+					  console.log('update');
 						angular.forEach(scope.rows, function (row) {
 							angular.forEach(row, function (day) {
-								day.selected = scope.selectedDates.indexOf(day.date.setHours(0, 0, 0, 0)) > -1
+								day.selected = scope.selectedDates.indexOf(Date.parse($filter('gmISODate')(day.date))) > -1;
 							});
 						});
 					}
-				}
-			}
+				};
+			};
 
 			return $delegate;
-		}
+		};
 
 		if ($injector.has('daypickerDirective'))
-			$provide.decorator('daypickerDirective', ['$delegate', daypickerDelegate]);
+			$provide.decorator('daypickerDirective', ['$delegate', '$filter', daypickerDelegate]);
 
 		if ($injector.has('uibDaypickerDirective'))
-			$provide.decorator('uibDaypickerDirective', ['$delegate', daypickerDelegate]);
+			$provide.decorator('uibDaypickerDirective', ['$delegate', '$filter', daypickerDelegate]);
 	}]);
 })(window.angular);
