@@ -38,9 +38,9 @@ Version 1.0.8 of this module is not compatible with the (uib-)datepicker-popup d
 
 ###UI Bootstrap 2.x.x
 
-The custom template solution for UI Bootstrap 1.x.x no longer works in UI Bootstrap 2.x.x. Instead, please use the `customClass` property of `datepicker-options` to apply a class to selected dates. This solution works for UI Bootstrap 1.x.x as well, if you prefer this solution to using custom templates.
+The custom template solution for UI Bootstrap 1.x.x no longer works in UI Bootstrap 2.x.x. Instead, please use the `customClass` property of `datepicker-options` to apply a class to selected dates. This solution works for UI Bootstrap 1.x.x as well, if you prefer this solution over using custom templates.
 
-See the plunker below for a working example:
+See the plunker below for a working example. Please note that removing dates from the selected dates array programmatically (like clicking the 'remove' button in the demo) doesn't automatically trigger an update on the datepicker. You need to re-assign the `activeDate` for your `customClass` handler to get called again:
 
 http://plnkr.co/edit/7rKzFo?p=preview
 
