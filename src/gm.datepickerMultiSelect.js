@@ -58,6 +58,15 @@ SOFTWARE.
 					});
 
 					var ngModelCtrl = ctrls[1];
+					var datepickerCtrl = ctrls[0];
+
+					if (ngModelCtrl) {
+							// Listen for 'refreshDatepickers' event... $scope.$broadcast('refreshDatepickers');
+							scope.$on('refreshDatepickers', function refreshView() {
+
+									datepickerCtrl.refreshView();
+							});
+					}
 
 					ngModelCtrl.$viewChangeListeners.push(function() {
 						var newVal = scope.$parent.$eval(attrs.ngModel);
