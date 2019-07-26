@@ -24,7 +24,7 @@ SOFTWARE.
 
 (function (angular) {
 	'use strict';
-	
+
 	angular.module('gm.datepickerMultiSelect', ['ui.bootstrap'])
 	.filter('gmISODate', function() {
 	  return function(date) {
@@ -32,7 +32,7 @@ SOFTWARE.
 	  }
 	})
 	.config(['$provide', '$injector', function ($provide, $injector) {
-	  
+
 	  var useUTC = false;
 
 		// extending datepicker (access to attributes and app scope through $parent)
@@ -63,7 +63,7 @@ SOFTWARE.
 						var newVal = scope.$parent.$eval(attrs.ngModel);
 						if(!newVal)
 							return;
-							
+
 						var dateVal = Date.parse($filter('gmISODate')(newVal)), //useUTC ? new Date(newVal).setUTCHours(0, 0, 0, 0) : new Date(newVal).setHours(0, 0, 0, 0),
 							selectedDates = scope.selectedDates;
 
@@ -129,9 +129,8 @@ SOFTWARE.
 					scope.$watch(function () {
 						return ctrl.activeDate.getTime();
 					}, update);
-					
+
 					function update() {
-					  console.log('update');
 						angular.forEach(scope.rows, function (row) {
 							angular.forEach(row, function (day) {
 								day.selected = scope.selectedDates.indexOf(Date.parse($filter('gmISODate')(day.date))) > -1;
